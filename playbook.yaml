@@ -10,6 +10,7 @@
       - node
       - terraform
       - python
+      - jq
     homebrew_cask_apps:
       - visual-studio-code
       - brave-browser
