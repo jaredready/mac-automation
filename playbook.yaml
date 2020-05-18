@@ -53,4 +53,8 @@
       pip:
         name: pipenv
         extra_args: --user
+    - name: Install pylint
+      pip:
+        name: pylint
+        extra_args: --user
 
