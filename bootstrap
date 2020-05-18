@@ -1,0 +1,36 @@
+#!/bin/bash
+if ! xcode-select -p >/dev/null; then
+  printf 'Installing xcode command line tools\n'
+  xcode-select --install
+fi
+
+if ! hash brew 2>/dev/null; then
+  printf 'Installing homebrew\n'
+  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+fi
+
+if ! brew list | grep -q python; then
+  printf 'Installing Python 3\n'
+  brew install python
+fi
+
+IFS=: read -ra paths <<< "$PATH"
+found_path=
+
+for path in "${paths[@]}"; do
+  if [[ $path = /usr/local/opt/python/libexec/bin ]]; then
+    found_path=42
+    break
+  fi
+done
+
+if [[ -z $found_path ]]; then
+  printf 'Prepending Brew-installed Python to PATH\n'
+  export PATH=/usr/local/opt/python/libexec/bin:$PATH
+fi
+
+if ! pip list | grep ansible > /dev/null; then
+  printf 'Installing Ansible\n'
+  pip install --user ansible
+fi
+

@@ -1,0 +1,56 @@
+---
+- hosts: localhost
+  vars:
+    homebrew_prefix: /usr/local
+    homebrew_install_path: "{{ homebrew_prefix }}/Homebrew"
+    homebrew_brew_bin_path: /usr/local/bin
+    homebrew_installed_packages:
+      - git
+      - nvim
+      - node
+      - terraform
+      - python
+    homebrew_cask_apps:
+      - visual-studio-code
+      - brave-browser
+      - discord
+  roles:
+    - geerlingguy.homebrew
+
+---
+- hosts: localhost
+  tasks:
+    - name: Generate SSH keypair
+      openssh_keypair:
+        path: ~/.ssh/id_ecdsa
+        type: ecdsa
+        size: 512
+    - name: Copy zshrc file
+      copy:
+        src: files/zshrc
+        dest: ~/.zshrc
+        owner: jaredready
+        group: jaredready
+        mode: u+rwx,g+rwx,o-rwx
+    - name: Copy init.vim file
+      copy:
+        src: files/init.vim
+        dest: ~/.config/nvim/init.vim
+        owner: jaredready
+        group: jaredready
+        mode: u+rwx,g+rwx,o-rwx
+    - name: Install AWS CLI
+      become: yes
+      command:
+        cmd:
+          - curl "https://awscli.amazonaws.com/AWSCLIV2.pkg" -o "AWSCLIV2.pkg"
+          - installer -pkg AWSCLIV2.pkg -target /
+    - name: Install aws-cdk
+      npm:
+        name: aws-cdk
+        global: yes
+    - name: Install pipenv
+      pip:
+        name: pipenv
+        extra-args: --user
+

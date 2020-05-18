@@ -1,0 +1,17 @@
+# Environment variable settings
+export PATH=$PATH:~/.bin
+export PROMPT='%F{blue}%~%f λ '
+# # The following is so we can use the brew-installed python instead of the system default ones
+export PATH=/usr/local/opt/python/libexec/bin:$PATH
+export PATH=$PATH:$(python -m site --user-base)/bin
+
+export CLICOLOR=1
+
+# Aliases
+alias vim=nvim
+
+# Functions
+function myip() {
+  curl -s ifconfig.me
+}
+
