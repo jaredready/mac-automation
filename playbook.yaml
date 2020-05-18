@@ -17,32 +17,30 @@
       - discord
   roles:
     - geerlingguy.homebrew
-
----
-- hosts: localhost
   tasks:
     - name: Generate SSH keypair
       openssh_keypair:
         path: ~/.ssh/id_ecdsa
         type: ecdsa
-        size: 512
+        size: 521
     - name: Copy zshrc file
       copy:
         src: files/zshrc
         dest: ~/.zshrc
         owner: jaredready
-        group: jaredready
+        group: staff
         mode: u+rwx,g+rwx,o-rwx
     - name: Copy init.vim file
       copy:
         src: files/init.vim
         dest: ~/.config/nvim/init.vim
         owner: jaredready
-        group: jaredready
+        group: staff
         mode: u+rwx,g+rwx,o-rwx
     - name: Install AWS CLI
       become: yes
       command:
+        creates: /usr/local/bin/aws
         cmd:
           - curl "https://awscli.amazonaws.com/AWSCLIV2.pkg" -o "AWSCLIV2.pkg"
           - installer -pkg AWSCLIV2.pkg -target /
@@ -53,5 +51,5 @@
     - name: Install pipenv
       pip:
         name: pipenv
-        extra-args: --user
+        extra_args: --user
 
