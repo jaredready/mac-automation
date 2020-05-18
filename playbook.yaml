@@ -1,9 +1,6 @@
 ---
 - hosts: localhost
   vars:
-    homebrew_prefix: /usr/local
-    homebrew_install_path: "{{ homebrew_prefix }}/Homebrew"
-    homebrew_brew_bin_path: /usr/local/bin
     homebrew_installed_packages:
       - git
       - nvim
@@ -15,9 +12,15 @@
       - visual-studio-code
       - brave-browser
       - discord
-  roles:
-    - geerlingguy.homebrew
   tasks:
+    - name: Install Homebrew packages
+      homebrew:
+        name: "{{ item }}"
+      loop: "{{ homebrew_installed_packages }}"
+    - name: Install Homebrew casks
+      homebrew_cask:
+        name: "{{ item }}"
+      loop: "{{ homebrew_cask_apps }}"
     - name: Generate SSH keypair
       openssh_keypair:
         path: ~/.ssh/id_ecdsa
@@ -29,21 +32,19 @@
         dest: ~/.zshrc
         owner: jaredready
         group: staff
-        mode: u+rwx,g+rwx,o-rwx
+        mode: 0644
     - name: Copy init.vim file
       copy:
         src: files/init.vim
         dest: ~/.config/nvim/init.vim
         owner: jaredready
         group: staff
-        mode: u+rwx,g+rwx,o-rwx
+        mode: 0644
     - name: Install AWS CLI
       become: yes
       command:
         creates: /usr/local/bin/aws
-        cmd:
-          - curl "https://awscli.amazonaws.com/AWSCLIV2.pkg" -o "AWSCLIV2.pkg"
-          - installer -pkg AWSCLIV2.pkg -target /
+        cmd: "curl 'https://awscli.amazonaws.com/AWSCLIV2.pkg' -o 'AWSCLIV2.pkg' && installer -pkg AWSCLIV2.pkg -target /"
     - name: Install aws-cdk
       npm:
         name: aws-cdk
