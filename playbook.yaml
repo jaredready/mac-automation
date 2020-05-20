@@ -49,6 +49,10 @@
       npm:
         name: aws-cdk
         global: yes
+    - name: Install typescript
+      npm:
+        name: typescript
+        global: yes
     - name: Install pipenv
       pip:
         name: pipenv
