@@ -11,7 +11,11 @@ export CLICOLOR=1
 alias vim=nvim
 
 # Functions
-function myip() {
+myip() {
   curl -s ifconfig.me
+}
+
+gitignore() {
+  curl -s -o .gitignore https://gitignore.io/api/$1
 }
 
