@@ -1,10 +1,19 @@
-# Environment variable settings
-export PATH=$PATH:~/.bin
+# Git integration
+autoload -Uz compinit && compinit
+autoload -Uz vcs_info
+precmd_vcs_info() { vcs_info }
+precmd_functions+=( precmd_vcs_info )
+setopt prompt_subst
+
+# Setup prompt
 export PROMPT='%F{blue}%~%f λ '
-# # The following is so we can use the brew-installed python instead of the system default ones
+export RPROMPT=\$vcs_info_msg_0_
+zstyle ':vcs_info:git:*' formats '%b'
+
+# Environment variable
 export PATH=/usr/local/opt/python/libexec/bin:$PATH
 export PATH=$PATH:$(python -m site --user-base)/bin
-
+export PATH=$PATH:~/.bin
 export CLICOLOR=1
 
 # Aliases
