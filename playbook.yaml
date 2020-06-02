@@ -8,6 +8,7 @@
       - terraform
       - python
       - jq
+      - go
     homebrew_cask_apps:
       - visual-studio-code
       - brave-browser
