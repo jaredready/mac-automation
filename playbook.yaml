@@ -9,9 +9,10 @@
       - python
       - jq
       - go
+      - kubectl
+      - awscli
     homebrew_cask_apps:
       - visual-studio-code
-      - brave-browser
       - discord
   tasks:
     - name: Install Homebrew packages
@@ -24,9 +25,8 @@
       loop: "{{ homebrew_cask_apps }}"
     - name: Generate SSH keypair
       openssh_keypair:
-        path: ~/.ssh/id_ecdsa
-        type: ecdsa
-        size: 521
+        path: ~/.ssh/id_ed25519
+        type: ed25519
     - name: Copy zshrc file
       copy:
         src: files/zshrc
@@ -41,25 +41,4 @@
         owner: jaredready
         group: staff
         mode: 0644
-    - name: Install AWS CLI
-      become: yes
-      command:
-        creates: /usr/local/bin/aws
-        cmd: "curl 'https://awscli.amazonaws.com/AWSCLIV2.pkg' -o 'AWSCLIV2.pkg' && installer -pkg AWSCLIV2.pkg -target /"
-    - name: Install aws-cdk
-      npm:
-        name: aws-cdk
-        global: yes
-    - name: Install typescript
-      npm:
-        name: typescript
-        global: yes
-    - name: Install pipenv
-      pip:
-        name: pipenv
-        extra_args: --user
-    - name: Install pylint
-      pip:
-        name: pylint
-        extra_args: --user
 
